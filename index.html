@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=1300">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <title>login</title>
+</head>
+<body>
+<input type="text" id="user">
+<input type="text" id="pass">
+
+<button id="login">登录</button>
+<button id="regist">注册</button>
+<button id="get">查询</button>
+<script>
+    $("#regist").on('click',function () {
+      var user = $("#user").val();
+      var pass = $("#pass").val();
+      $.ajax({
+        type: "post",
+        url: 'auth/register',
+        data: {user:user, pass:pass},
+        dataType: "json",
+        success: function(data){
+          console.log(data)
+        }
+      })
+    })
+    $("#login").on('click',function () {
+      var user = $("#user").val();
+      var pass = $("#pass").val();
+      $.ajax({
+        type: "post",
+        url: 'auth/login',
+        data: {user:user, pass:pass},
+        dataType: "json",
+        success: function(data){
+          localStorage.setItem('tid',data.token)
+          console.log(data)
+        }
+      })
+    })
+    $("#get").on('click',function () {
+      var tid = localStorage.getItem('tid');
+      $.ajax({
+        type: "get",
+        url: 'auth/logined',
+        // url: 'api/getuser',
+        dataType: "json",
+        headers: {
+          tid: tid
+        },
+        success: function(data){
+          console.log(data)
+        }
+      })
+    })
+</script>
+</body>
+</html>
