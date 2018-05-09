@@ -26,9 +26,9 @@ npm install
 ```js
 npm run dev
 ```
-`static`目录下有登录页面以及个人介绍页面
-`config`目录下为基本配置项，包括**端口**、**登录账号密码**、**校验toen的接口**、**加密盐**
-`blog-serverpull.js`文件为自动化git部署文件，具体使用可以看[这篇文章](http://binlive.cn/details/59917958b7f98169b30efa24 "这篇文章")
+- `static`目录下有登录页面以及个人介绍页面
+- `config`目录下为基本配置项，包括**端口**、**登录账号密码**、**校验toen的接口**、**加密盐**
+- `blog-serverpull.js`文件为自动化git部署文件，具体使用可以看[这篇文章](http://binlive.cn/details/59917958b7f98169b30efa24 "这篇文章")
 ## 项目说明
 
  - 使用koa2作为后端服务
