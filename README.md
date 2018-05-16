@@ -11,8 +11,8 @@ npm install
 ```
 
 ## 运行
-首先安装mongodb和redis后并启动
-**启动服务命令**
+首先安装mongodb和redis并启动数据库
+######启动服务命令
 ```js
 npm start
 ```
@@ -27,7 +27,7 @@ npm install
 npm run dev
 ```
 - `static`目录下有登录页面以及个人介绍页面
-- `config`目录下为基本配置项，包括**端口**、**登录账号密码**、**校验toen的接口**、**加密盐**
+- `config`目录下为基本配置项，包括**端口**、**登录账号密码**、**校验toen的接口**、**加密盐**、**前台超级管理员**
 - `blog-serverpull.js`文件为自动化git部署文件，具体使用可以看[这篇文章](http://binlive.cn/details/59917958b7f98169b30efa24 "这篇文章")
 ## 项目说明
 
