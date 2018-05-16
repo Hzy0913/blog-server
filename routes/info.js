@@ -2,9 +2,11 @@ const router = require('koa-router')({})
 const db = require('../models'); //models
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
-const {admin, secret} = require('../config')
+const {admin, secret, superAdmin} = require('../config')
 
 router.prefix('/api');
+
+
 
 
 // 查询博客标签
@@ -136,6 +138,54 @@ router.post('/subComment/:id/:subid', async ctx => {
   ctx.body = {err: 200, message: '评论成功！'};
 });
 
+// deletecomment
+router.post('/deletecomment/:id', async ctx => {
+  const {id} = ctx.params;
+  const {headers: {token}} = ctx.request;
+  const jwtVerify = jwt.verify(token, secret);
+  if (jwtVerify.superAdmin !== superAdmin) {
+    ctx.body = {err: 401, message: '没有权限！'};
+    return;
+  }
+  const {created} = ctx.request.body;
+  const Article = await db.Article.findOne({_id : id});
+  if (!Article) {
+    ctx.body = {err: 403, message: '文章不存在！'};
+    return;
+  }
+  const updateComments = Article.comment.filter(item => item.created !== created);
+  await db.Article.update({_id : id}, {$set: {comment: updateComments}});
+  ctx.body = {err: 200, message: '删除成功！'};
+});
+
+// deleteSubcomment
+router.post('/deleteSubcomment/:id', async ctx => {
+  const {id} = ctx.params;
+  const {headers: {token}} = ctx.request;
+  const jwtVerify = jwt.verify(token, secret);
+  if (jwtVerify.superAdmin !== superAdmin) {
+    ctx.body = {err: 401, message: '没有权限！'};
+    return;
+  }
+  const {created, subcreated} = ctx.request.body;
+  const Article = await db.Article.findOne({_id : id});
+  const {comment} = Article;
+  if (!Article) {
+    ctx.body = {err: 403, message: '文章不存在！'};
+    return;
+  }
+  let index = 0;
+  comment.forEach(async (item, i) => {
+    if (item.created == created) {
+      index = i;
+    }
+  });
+  const key = `comment.${index}.subcomment`;
+  const updateComments = (Article.comment.find(item => item.created === created).subcomment || []).filter(i => i.created !== subcreated);
+  await db.Article.update({_id : id}, {$set: {[key]: updateComments}});
+  ctx.body = {err: 200, message: '删除成功！'};
+});
+
 // auth
 router.post('/auth', async ctx => {
   const {lid} = ctx.request.body;
@@ -166,7 +216,18 @@ router.get('/oauth', async ctx => {
 router.get('/authorized/:id', async ctx => {
   const {id} = ctx.params;
   if(id) {
-    const user = await db.OAUTH.findOne({id});
+    const user = {};
+    const userInfo = await db.OAUTH.findOne({id});
+    const {_id, ...userr} = userInfo;
+    user.id = userInfo.id;
+    user.name = userInfo.name;
+    user.avatar_url = userInfo.avatar_url;
+    user.email = userInfo.email;
+    user.html_url = userInfo.html_url;
+    if (userInfo._id == superAdmin) {
+      const token = jwt.sign({superAdmin}, secret, {expiresIn:  200000000});
+      user.token = token;
+    }
     ctx.body = {err: 200, user};
   } else {
     ctx.body = {err: 200, user: ''};
