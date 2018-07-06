@@ -18,7 +18,6 @@ app.use(cors())
 app.use(json())
 app.use(logger())
 
-
 // session 模块
 app.keys = [secret];
 app.use(session({
@@ -34,7 +33,6 @@ app.use(session({
 
 app.use(koaStatic(path.join( __dirname,  './static')));
 app.use(koaStatic(path.join( __dirname,  './admin/dist')));
-
 
 app.use(async (ctx, next) => {
   await next().catch((err) => {
@@ -76,7 +74,6 @@ app.use(async (ctx, next) => {
     await next();
   }
 });
-
 
 app.use(require('./routes/auth').routes());
 app.use(require('./routes/info').routes());

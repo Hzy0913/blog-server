@@ -142,6 +142,7 @@ const upload = multer({
     fileSize: bytes('5MB') // 限制文件在5MB以内
   }
 });
+
 router.post('/imgUpload', upload.single('image'), async ctx => {
   const client = qn.create({
     accessKey: 'W712xA97i9sl2112gg5ZpBB12P8gXTL42R1tqNUzWdBT15imw', //七牛accessKey

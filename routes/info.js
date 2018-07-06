@@ -6,9 +6,6 @@ const {admin, secret, superAdmin} = require('../config')
 
 router.prefix('/api');
 
-
-
-
 // 查询博客标签
 router.get('/getArticleLabel', async (ctx, next) => {
   const tagList =  await db.TagList.find({});
@@ -50,7 +47,6 @@ router.get('/ArticleSearch/:search', async ctx => {
   const Article = await db.Article.find({title:{$regex: search, $options:'i'}});
   ctx.body = {err: 200, Article};
 });
-
 
 router.get('/getuser', async (ctx, next) => {
   const output = {
