@@ -12,7 +12,7 @@ npm install
 
 ## 运行
 首先安装mongodb和redis并启动数据库
-######启动服务命令
+##### 然后启动node服务
 ```js
 npm start
 ```
